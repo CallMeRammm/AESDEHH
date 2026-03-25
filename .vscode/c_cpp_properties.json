@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "name": "Emscripten",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/home/ramss/emsdk/upstream/emscripten/system/include",
+                "/home/ramss/emsdk/upstream/emscripten/system/include/emscripten"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/lib/ccache/gcc-11",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 4
+}

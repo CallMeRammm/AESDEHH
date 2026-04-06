@@ -32,7 +32,7 @@ em++ -std=c++17 \
      -s ENVIRONMENT='web' \
      -lembind \
      verifikasi.cpp \
-     -o ../frontend/verifikasi_magang.js
+     -o ../dist/verifikasi_magang.js
 
 if [ $? -eq 0 ]; then
     echo "✅ Build successful!"

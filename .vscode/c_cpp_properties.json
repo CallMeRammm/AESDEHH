@@ -1,14 +1,35 @@
 {
     "configurations": [
         {
+            "name": "Linux-GCC",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/backend/**",
+                "/usr/include/c++/**",
+                "/usr/include/x86_64-linux-gnu/c++/**",
+                "/usr/include/**"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/g++",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "linux-gcc-x64",
+            "compileCommands": "${workspaceFolder}/backend/build/compile_commands.json"
+        },
+        {
             "name": "Emscripten",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/home/ramss/emsdk/upstream/emscripten/system/include",
-                "/home/ramss/emsdk/upstream/emscripten/system/include/emscripten"
+                "${workspaceFolder}/backend/**",
+                "${env:EMSDK}/upstream/emscripten/system/include",
+                "${env:EMSDK}/upstream/emscripten/system/include/emscripten",
+                "${workspaceFolder}/emsdk/upstream/emscripten/system/include",
+                "${workspaceFolder}/emsdk/upstream/emscripten/system/include/emscripten"
             ],
-            "defines": [],
-            "compilerPath": "/usr/lib/ccache/gcc-11",
+            "defines": [
+                "__EMSCRIPTEN__"
+            ],
+            "compilerPath": "${env:EMSDK}/upstream/emscripten/em++",
             "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "clang-x64"

@@ -1,0 +1,45 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build-wasm",
+            "type": "shell",
+            "command": "${workspaceFolder}/backend/build-wasm.sh",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [],
+            "detail": "Build WebAssembly module from C++"
+        },
+        {
+            "label": "build-wasm-cmake",
+            "type": "shell",
+            "command": "cd ${workspaceFolder}/backend && mkdir -p build && cd build && emcmake cmake .. && emmake make",
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "serve-frontend",
+            "type": "shell",
+            "command": "cd ${workspaceFolder}/dist && python3 -m http.server 8080",
+            "group": "test",
+            "isBackground": true,
+            "problemMatcher": []
+        },
+        {
+            "label": "serve-frontend-node",
+            "type": "shell",
+            "command": "cd ${workspaceFolder}/dist && npx serve -p 8080",
+            "group": "test",
+            "isBackground": true,
+            "problemMatcher": []
+        },
+        {
+            "label": "clean-wasm",
+            "type": "shell",
+            "command": "rm -f ${workspaceFolder}/dist/verifikasi_magang.js ${workspaceFolder}/dist/verifikasi_magang.wasm",
+            "group": "build"
+        }
+    ]
+}

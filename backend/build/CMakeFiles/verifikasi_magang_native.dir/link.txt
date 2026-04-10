@@ -1,1 +1,0 @@
-/usr/lib/ccache/g++  -g   CMakeFiles/verifikasi_magang_native.dir/verifikasi.cpp.o CMakeFiles/verifikasi_magang_native.dir/main.cpp.o  -o verifikasi_magang_native 

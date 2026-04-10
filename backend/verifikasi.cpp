@@ -1,7 +1,6 @@
 // ==========================================
-// VERIFIKASI.CPP - SISTEM VERIFIKASI MAGANG
-// Single file implementation (tanpa header)
-// Untuk WebAssembly (Emscripten)
+// SISTEM VERIFIKASI MAGANG
+// menggunakan WebAssembly (Emscripten)
 // ==========================================
 
 #include <string>
@@ -12,171 +11,191 @@
 
 using namespace emscripten;
 
-// ==========================================
-// ENUM STATUS
-// ==========================================
-
-enum class Status {
+enum class Status
+{
     MENUNGGU = 0,
     DITERIMA = 1,
     DITOLAK = 2
 };
 
-// ==========================================
-// STRUCT BERKAS MAGANG
-// ==========================================
-
-struct BerkasMagang {
+struct BerkasMagang
+{
     std::string nama;
     std::string nim;
     std::string perusahaan;
     Status status;
-    
-    std::string statusToString() const {
-        switch (status) {
-            case Status::MENUNGGU: return "MENUNGGU";
-            case Status::DITERIMA: return "DITERIMA";
-            case Status::DITOLAK: return "DITOLAK";
+
+    std::string statusToString() const
+    {
+        switch (status)
+        {
+        case Status::MENUNGGU:
+            return "MENUNGGU";
+        case Status::DITERIMA:
+            return "DITERIMA";
+        case Status::DITOLAK:
+            return "DITOLAK";
         }
         return "UNKNOWN";
     }
-    
-    static Status stringToStatus(const std::string& s) {
-        if (s == "DITERIMA") return Status::DITERIMA;
-        if (s == "DITOLAK") return Status::DITOLAK;
+
+    static Status stringToStatus(const std::string &s)
+    {
+        if (s == "DITERIMA")
+            return Status::DITERIMA;
+        if (s == "DITOLAK")
+            return Status::DITOLAK;
         return Status::MENUNGGU;
     }
 };
 
-// ==========================================
 // QUEUE NODE (LINKED LIST)
-// ==========================================
-
-struct QueueNode {
+struct QueueNode
+{
     BerkasMagang data;
-    QueueNode* next;
-    QueueNode(const BerkasMagang& d) : data(d), next(nullptr) {}
+    QueueNode *next;
+    QueueNode(const BerkasMagang &d) : data(d), next(nullptr) {}
 };
 
-// ==========================================
 // QUEUE CLASS
-// ==========================================
-
-class QueueLL {
+class QueueLL
+{
 private:
-    QueueNode* frontPtr;
-    QueueNode* rearPtr;
-    
+    QueueNode *frontPtr;
+    QueueNode *rearPtr;
+
 public:
     QueueLL() : frontPtr(nullptr), rearPtr(nullptr) {}
-    
-    ~QueueLL() {
+
+    ~QueueLL()
+    {
         clear();
     }
-    
-    bool isEmpty() const {
+
+    bool isEmpty() const
+    {
         return frontPtr == nullptr;
     }
-    
-    void enqueue(const BerkasMagang& x) {
-        QueueNode* node = new QueueNode(x);
-        if (isEmpty()) {
+
+    void enqueue(const BerkasMagang &x)
+    {
+        QueueNode *node = new QueueNode(x);
+        if (isEmpty())
+        {
             frontPtr = rearPtr = node;
-        } else {
+        }
+        else
+        {
             rearPtr->next = node;
             rearPtr = node;
         }
     }
-    
-    bool dequeue(BerkasMagang& out) {
-        if (isEmpty()) return false;
-        QueueNode* temp = frontPtr;
+
+    bool dequeue(BerkasMagang &out)
+    {
+        if (isEmpty())
+            return false;
+        QueueNode *temp = frontPtr;
         out = temp->data;
         frontPtr = frontPtr->next;
-        if (frontPtr == nullptr) rearPtr = nullptr;
+        if (frontPtr == nullptr)
+            rearPtr = nullptr;
         delete temp;
         return true;
     }
-    
-    std::vector<BerkasMagang> getAll() const {
+
+    std::vector<BerkasMagang> getAll() const
+    {
         std::vector<BerkasMagang> result;
-        QueueNode* cur = frontPtr;
-        while (cur) {
+        QueueNode *cur = frontPtr;
+        while (cur)
+        {
             result.push_back(cur->data);
             cur = cur->next;
         }
         return result;
     }
-    
-    void clear() {
+
+    void clear()
+    {
         BerkasMagang tmp;
-        while (dequeue(tmp)) {}
+        while (dequeue(tmp))
+        {
+        }
     }
 };
 
-// ==========================================
 // STACK NODE (LINKED LIST)
-// ==========================================
-
-struct StackNode {
+struct StackNode
+{
     BerkasMagang data;
-    StackNode* next;
-    StackNode(const BerkasMagang& d) : data(d), next(nullptr) {}
+    StackNode *next;
+    StackNode(const BerkasMagang &d) : data(d), next(nullptr) {}
 };
 
-// ==========================================
 // STACK CLASS
-// ==========================================
-
-class StackLL {
+class StackLL
+{
 private:
-    StackNode* topPtr;
-    
+    StackNode *topPtr;
+
 public:
     StackLL() : topPtr(nullptr) {}
-    
-    ~StackLL() {
+
+    ~StackLL()
+    {
         clear();
     }
-    
-    bool isEmpty() const {
+
+    bool isEmpty() const
+    {
         return topPtr == nullptr;
     }
-    
-    void push(const BerkasMagang& x) {
-        StackNode* node = new StackNode(x);
+
+    void push(const BerkasMagang &x)
+    {
+        StackNode *node = new StackNode(x);
         node->next = topPtr;
         topPtr = node;
     }
-    
-    bool pop(BerkasMagang& out) {
-        if (isEmpty()) return false;
-        StackNode* temp = topPtr;
+
+    bool pop(BerkasMagang &out)
+    {
+        if (isEmpty())
+            return false;
+        StackNode *temp = topPtr;
         out = temp->data;
         topPtr = topPtr->next;
         delete temp;
         return true;
     }
-    
-    bool peek(BerkasMagang& out) const {
-        if (isEmpty()) return false;
+
+    bool peek(BerkasMagang &out) const
+    {
+        if (isEmpty())
+            return false;
         out = topPtr->data;
         return true;
     }
-    
-    std::vector<BerkasMagang> getAll() const {
+
+    std::vector<BerkasMagang> getAll() const
+    {
         std::vector<BerkasMagang> result;
-        StackNode* cur = topPtr;
-        while (cur) {
+        StackNode *cur = topPtr;
+        while (cur)
+        {
             result.push_back(cur->data);
             cur = cur->next;
         }
         return result;
     }
-    
-    void clear() {
+
+    void clear()
+    {
         BerkasMagang tmp;
-        while (pop(tmp)) {}
+        while (pop(tmp))
+        {
+        }
     }
 };
 
@@ -184,24 +203,26 @@ public:
 // MAIN CONTROLLER CLASS
 // ==========================================
 
-class VerifikasiController {
+class VerifikasiController
+{
 private:
     QueueLL antrean;
     StackLL riwayat;
-    
+
 public:
     VerifikasiController() = default;
-    
+
     // Tambah berkas ke antrean
-    std::string tambahBerkas(const std::string& nama, const std::string& nim, const std::string& perusahaan) {
+    std::string tambahBerkas(const std::string &nama, const std::string &nim, const std::string &perusahaan)
+    {
         BerkasMagang b;
         b.nama = nama;
         b.nim = nim;
         b.perusahaan = perusahaan;
         b.status = Status::MENUNGGU;
-        
+
         antrean.enqueue(b);
-        
+
         std::ostringstream oss;
         oss << "{\"success\":true,\"message\":\"Berkas berhasil ditambahkan\",\"data\":{";
         oss << "\"nama\":\"" << nama << "\",";
@@ -210,15 +231,18 @@ public:
         oss << "\"status\":\"MENUNGGU\"}}";
         return oss.str();
     }
-    
+
     // Lihat semua antrean
-    std::string tampilkanAntrean() {
+    std::string tampilkanAntrean()
+    {
         auto daftar = antrean.getAll();
         std::ostringstream oss;
         oss << "{\"success\":true,\"data\":[";
-        
-        for (size_t i = 0; i < daftar.size(); i++) {
-            if (i > 0) oss << ",";
+
+        for (size_t i = 0; i < daftar.size(); i++)
+        {
+            if (i > 0)
+                oss << ",";
             oss << "{";
             oss << "\"nama\":\"" << daftar[i].nama << "\",";
             oss << "\"nim\":\"" << daftar[i].nim << "\",";
@@ -226,23 +250,25 @@ public:
             oss << "\"status\":\"" << daftar[i].statusToString() << "\"";
             oss << "}";
         }
-        
+
         oss << "],\"total\":" << daftar.size() << "}";
         return oss.str();
     }
-    
+
     // Proses verifikasi
-    std::string prosesVerifikasi(const std::string& statusStr) {
+    std::string prosesVerifikasi(const std::string &statusStr)
+    {
         BerkasMagang b;
         bool dequeued = antrean.dequeue(b);
-        
-        if (!dequeued) {
+
+        if (!dequeued)
+        {
             return "{\"success\":false,\"message\":\"Antrean kosong\"}";
         }
-        
+
         b.status = BerkasMagang::stringToStatus(statusStr);
         riwayat.push(b);
-        
+
         std::ostringstream oss;
         oss << "{\"success\":true,\"message\":\"Verifikasi selesai\",\"data\":{";
         oss << "\"nama\":\"" << b.nama << "\",";
@@ -251,15 +277,18 @@ public:
         oss << "\"status\":\"" << b.statusToString() << "\"}}";
         return oss.str();
     }
-    
+
     // Lihat semua riwayat
-    std::string tampilkanRiwayat() {
+    std::string tampilkanRiwayat()
+    {
         auto daftar = riwayat.getAll();
         std::ostringstream oss;
         oss << "{\"success\":true,\"data\":[";
-        
-        for (size_t i = 0; i < daftar.size(); i++) {
-            if (i > 0) oss << ",";
+
+        for (size_t i = 0; i < daftar.size(); i++)
+        {
+            if (i > 0)
+                oss << ",";
             oss << "{";
             oss << "\"nama\":\"" << daftar[i].nama << "\",";
             oss << "\"nim\":\"" << daftar[i].nim << "\",";
@@ -267,20 +296,22 @@ public:
             oss << "\"status\":\"" << daftar[i].statusToString() << "\"";
             oss << "}";
         }
-        
+
         oss << "],\"total\":" << daftar.size() << "}";
         return oss.str();
     }
-    
+
     // Lihat berkas terakhir diproses
-    std::string tampilkanTerakhir() {
+    std::string tampilkanTerakhir()
+    {
         BerkasMagang b;
         bool found = riwayat.peek(b);
-        
-        if (!found) {
+
+        if (!found)
+        {
             return "{\"success\":false,\"message\":\"Riwayat kosong\"}";
         }
-        
+
         std::ostringstream oss;
         oss << "{\"success\":true,\"data\":{";
         oss << "\"nama\":\"" << b.nama << "\",";
@@ -289,28 +320,32 @@ public:
         oss << "\"status\":\"" << b.statusToString() << "\"}}";
         return oss.str();
     }
-    
+
     // Cari berkas (di antrean dan riwayat)
-    std::string cariBerkas(const std::string& keyword) {
+    std::string cariBerkas(const std::string &keyword)
+    {
         std::vector<BerkasMagang> hasil;
-        
-        auto cari = [&keyword](const BerkasMagang& b) {
+
+        auto cari = [&keyword](const BerkasMagang &b)
+        {
             return b.nama.find(keyword) != std::string::npos ||
                    b.nim.find(keyword) != std::string::npos ||
                    b.perusahaan.find(keyword) != std::string::npos;
         };
-        
+
         auto antreanList = antrean.getAll();
         auto riwayatList = riwayat.getAll();
-        
+
         std::copy_if(antreanList.begin(), antreanList.end(), std::back_inserter(hasil), cari);
         std::copy_if(riwayatList.begin(), riwayatList.end(), std::back_inserter(hasil), cari);
-        
+
         std::ostringstream oss;
         oss << "{\"success\":true,\"data\":[";
-        
-        for (size_t i = 0; i < hasil.size(); i++) {
-            if (i > 0) oss << ",";
+
+        for (size_t i = 0; i < hasil.size(); i++)
+        {
+            if (i > 0)
+                oss << ",";
             oss << "{";
             oss << "\"nama\":\"" << hasil[i].nama << "\",";
             oss << "\"nim\":\"" << hasil[i].nim << "\",";
@@ -318,59 +353,67 @@ public:
             oss << "\"status\":\"" << hasil[i].statusToString() << "\"";
             oss << "}";
         }
-        
+
         oss << "],\"keyword\":\"" << keyword << "\",\"total\":" << hasil.size() << "}";
         return oss.str();
     }
-    
+
     // Hapus semua antrean
-    std::string hapusAntrean() {
+    std::string hapusAntrean()
+    {
         antrean.clear();
         return "{\"success\":true,\"message\":\"Semua antrean berhasil dihapus\"}";
     }
-    
+
     // Reset semua riwayat
-    std::string resetRiwayat() {
+    std::string resetRiwayat()
+    {
         riwayat.clear();
         return "{\"success\":true,\"message\":\"Riwayat berhasil direset\"}";
     }
-    
+
     // Get jumlah antrean
-    int getAntreanCount() {
+    int getAntreanCount()
+    {
         return antrean.getAll().size();
     }
-    
+
     // Get jumlah riwayat
-    int getRiwayatCount() {
+    int getRiwayatCount()
+    {
         return riwayat.getAll().size();
     }
-    
+
     // Get jumlah diterima
-    int getDiterimaCount() {
+    int getDiterimaCount()
+    {
         auto daftar = riwayat.getAll();
         int count = 0;
-        for (const auto& b : daftar) {
-            if (b.status == Status::DITERIMA) count++;
+        for (const auto &b : daftar)
+        {
+            if (b.status == Status::DITERIMA)
+                count++;
         }
         return count;
     }
-    
+
     // Get jumlah ditolak
-    int getDitolakCount() {
+    int getDitolakCount()
+    {
         auto daftar = riwayat.getAll();
         int count = 0;
-        for (const auto& b : daftar) {
-            if (b.status == Status::DITOLAK) count++;
+        for (const auto &b : daftar)
+        {
+            if (b.status == Status::DITOLAK)
+                count++;
         }
         return count;
     }
 };
 
-// ==========================================
-// EMSCRIPTEN BINDINGS (untuk WASM)
-// ==========================================
-
-EMSCRIPTEN_BINDINGS(verifikasi_module) {
+// EMSCRIPTEN BINDINGS (buat WASM)
+EMSCRIPTEN_BINDINGS(verifikasi_module)
+{
     class_<VerifikasiController>("VerifikasiController")
         .constructor<>()
         .function("tambahBerkas", &VerifikasiController::tambahBerkas)

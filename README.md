@@ -24,7 +24,12 @@ Cara kedua dengan menggunakan python server
 5. Lakukan change direktory ke folder /dist
 6. Jalankan python server dengan command berikut : python3 -m http.server 8080
 7. Buka Browser apa saja
-8. masuk ke http://localhost:8080/
+8. Masuk ke http://localhost:8080/
 
 Cara ketiga jika ingin melakukan run mandiri file cpp dan webnya
-1. terlebih dahulu me
+1. Sebaiknya terlebih dahulu memiliki emcripten untuk Web Assembly
+2. Jika sudah memiliki, lakukan git clone ke folder kosong
+3. Buka VSCode dan masuk ke program yang telah kami buat
+4. Buka terminal di VSCode, kemudian gunakan command berikut : ./run.sh
+
+Sekian Terimakasih... 🙏🙏
